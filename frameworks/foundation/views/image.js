@@ -292,14 +292,18 @@ SC.ImageView = SC.View.extend(SC.Control,
   }.observes('imageValue'),
   
   _storedImageDidLoad: function(url, image) {
+    var value = this.get('imageValue');
+    
     // check to see if we actually got the image
     // we can't rely on image.src as it will be a datauri
-    if (image && this.get('imageValue') === url) {
+    if (SC.ok(image) && value === url) {
       this.didLoad(image);
     } else if (this.get('useImageQueue')) {
       this._loadImage();
     } else {
-      
+      image = new Image();
+      image.src = value;
+      this.didLoad(image);
     }
   },
   
